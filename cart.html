@@ -52,48 +52,87 @@
         <!-- Item cart akan ditampilkan di sini -->
     </div>
     <button class="btn btn-primary mt-3" id="clear-cart">Clear Cart</button>
+	<button class="btn btn-primary mt-3" id="checkout">Checkout</button>
 </div>
 
 <script>
-// Fungsi untuk mengambil dan menampilkan item dari Local Storage
-function displayCartItems() {
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    let cartItemsContainer = document.getElementById('cart-items');
-
-    cartItemsContainer.innerHTML = ''; // Kosongkan dulu
-
-    // Jika keranjang kosong
-    if (cart.length === 0) {
-        cartItemsContainer.innerHTML = '<p>Your cart is empty.</p>';
-        return;
-    }
-
-    // Loop melalui item di cart dan tampilkan
-    cart.forEach((item, index) => {
-        let cartItem = `
-        <div class="col-md-4">
-            <div class="card mb-4">
-                <img src="${item.image}" class="card-img-top" alt="${item.name}">
-                <div class="card-body">
-                    <h5 class="card-title">${item.name}</h5>
-                    <p class="card-text">IDR ${item.price}</p>
-                </div>
-            </div>
-        </div>
-        `;
-        cartItemsContainer.innerHTML += cartItem;
-    });
-}
-
-// Fungsi untuk membersihkan keranjang
-document.getElementById('clear-cart').addEventListener('click', function() {
-    localStorage.removeItem('cart');
-    displayCartItems();
-});
-
-// Panggil fungsi untuk menampilkan item saat halaman dimuat
-displayCartItems();
-</script>
+	document.getElementById('checkout').addEventListener('click', function() {
+    // Misalnya, arahkan pengguna ke halaman pembayaran
+    	window.location.href = "checkout.html";
+	});
+	// Fungsi untuk menambahkan item ke Local Storage
+	function addToCart(name, price, image) {
+		let cart = JSON.parse(localStorage.getItem('cart')) || [];
+	
+		// Buat objek produk
+		let item = {
+			name: name,
+			price: price,
+			image: image
+		};
+	
+		// Tambahkan produk ke keranjang (cart)
+		cart.push(item);
+		localStorage.setItem('cart', JSON.stringify(cart));
+	
+		// Pindah ke halaman cart.html
+		window.location.href = "cart.html";
+	}
+	
+	// Event listener untuk tombol "Add to Cart"
+	document.querySelectorAll('.add-to-cart').forEach(button => {
+		button.addEventListener('click', function() {
+			// Ambil data produk dari atribut data
+			let name = this.getAttribute('data-name');
+			let price = this.getAttribute('data-price');
+			let image = this.getAttribute('data-image');
+			
+			// Panggil fungsi untuk menambah item ke Local Storage dan pindah ke cart
+			addToCart(name, price, image);
+		});
+	});
+	</script>
+	<script>
+		// Fungsi untuk mengambil dan menampilkan item dari Local Storage
+		function displayCartItems() {
+			let cart = JSON.parse(localStorage.getItem('cart')) || [];
+			let cartItemsContainer = document.getElementById('cart-items');
+		
+			cartItemsContainer.innerHTML = ''; // Kosongkan dulu
+		
+			// Jika keranjang kosong
+			if (cart.length === 0) {
+				cartItemsContainer.innerHTML = '<p>Your cart is empty.</p>';
+				return;
+			}
+		
+			// Loop melalui item di cart dan tampilkan
+			cart.forEach((item, index) => {
+				let cartItem = `
+				<div class="col-md-4">
+					<div class="card mb-4">
+						<img src="${item.image}" class="card-img-top" alt="${item.name}">
+						<div class="card-body">
+							<h5 class="card-title">${item.name}</h5>
+							<p class="card-text">IDR ${item.price}</p>
+						</div>
+					</div>
+				</div>
+				`;
+				cartItemsContainer.innerHTML += cartItem;
+			});
+		}
+		
+		// Fungsi untuk membersihkan keranjang
+		document.getElementById('clear-cart').addEventListener('click', function() {
+			localStorage.removeItem('cart');
+			displayCartItems();
+		});
+		
+		// Panggil fungsi untuk menampilkan item saat halaman dimuat
+		displayCartItems();
+		</script>
+			
 
 <script src="js/bootstrap.bundle.min.js"></script>
 <script src="js/tiny-slider.js"></script>
